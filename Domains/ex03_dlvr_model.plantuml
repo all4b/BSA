@@ -1,0 +1,318 @@
+@startuml
+
+entity client <<КЛИЕНТ>> {
+  ' Первичный ключ
+  * client_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : char
+  email : varchar
+  * address : VARCHAR
+  * login : varchar
+  * password_hash : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity supplier <<ПОСТАВЩИК>> {
+  ' Первичный ключ
+  * supplier_id : int [PK]
+  --
+  ' Основная информация
+  * inn : VARCHAR
+  * name : VARCHAR
+  * form_business : ENUM
+  * address : VARCHAR
+  * phone : VARCHAR
+  * email : VARCHAR
+  * fio : VARCHAR
+  phone_delegate : VARCHAR
+  email_delegate : VARCHAR
+  login : VARCHAR
+  password : VARCHAR
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity operator <<ОПЕРАТОР>> {
+  ' Первичный ключ
+  * operator_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity courier <<КУРЬЕР>> {
+  ' Первичный ключ
+  * courier_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * pasport : CHAR(10)
+  med_book : VARCHAR
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity administrator <<АДМИНИСТРАТОР>> {
+  ' Первичный ключ
+  * administrator_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity dispatcher <<ДИСПЕТЧЕР>> {
+  ' Первичный ключ
+  * dispatcher_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity accountant <<БУХГАЛТЕР>> {
+  ' Первичный ключ
+  * accountant_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity student <<СТУДЕНТ>> {
+  ' Первичный ключ
+  * student_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity order <<ЗАКАЗ>> {
+  ' Первичный ключ
+  * order_id : int [PK]
+  --
+  ' Основная информация
+  number_supplier : VARCHAR
+  * status : ENUM
+  * supplier_address : VARCHAR
+  * client_address : VARCHAR
+  * time_preparing : DATETIME
+  * time_delivery : DATETIME
+  * cost_courier : DECIMAL
+  * cost_supplier : DECIMAL
+  * date_order : DATETIME
+  date_finish : DATETIME
+  comment : TEXT
+  --
+  ' Связи
+  * supplier_id : int [FK]
+  * client_id : int [FK]
+  --
+  ' Системные поля
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity payment_courier <<Расчет (с курьером)>> {
+  ' Первичный ключ
+  * payment_courier_id : int [PK]
+  --
+  ' Основная информация
+  * sum_accrual : DECIMAL
+  * date_accrual : DATE
+  sum_payment : DECIMAL
+  date_payment : DATE
+  --
+  ' Связи
+  * courier_id : int [FK]
+  * delivery_id : int [FK]
+  --
+  ' Системные поля
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity payment_supplier <<Расчет (с поставщиком)>> {
+  ' Первичный ключ
+  * payment_supplier_id : int [PK]
+  --
+  ' Основная информация
+  * sum_accrual : DECIMAL
+  * date_accrual : DATE
+  sum_payment : DECIMAL
+  date_payment : DATE
+  --
+  ' Связи
+  * order_id : int [FK]
+  * supplier_id : int [FK]
+  --
+  ' Системные поля
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity user_role <<РОЛЬ>> {
+  ' Первичный ключ
+  * role_id : int [PK]
+  --
+  ' Основная информация
+  * role : varchar
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity delivery <<ДОСТАВКА>> {
+  ' Первичный ключ
+  * delivery_id : int [PK]
+  --
+  ' Основная информация
+  time_receiving : DATETIME
+  time_delivery : DATETIME
+  * time_selection : DATETIME
+  * status : ENUM
+  * cost_courier : DECIMAL
+  comment : TEXT
+  --
+  ' Связи
+  * order_id : int [FK]
+  * courier_id : int [FK]
+  --
+  ' Системные поля
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+' Связи
+user_role ||--o{ client : "имеет"
+user_role ||--o{ supplier : "имеет"
+user_role ||--o{ operator : "имеет"
+user_role ||--o{ courier : "имеет"
+user_role ||--o{ administrator : "имеет"
+user_role ||--o{ dispatcher : "имеет"
+user_role ||--o{ accountant : "имеет"
+user_role ||--o{ student : "имеет"
+
+payment_supplier }|--|| supplier : "оплачивает счет"
+
+delivery }o--|| courier : "осуществляет"
+delivery ||--|{ payment_courier : "начисляется выплата"
+
+payment_courier }|--|| courier : "получает выплату"
+
+order ||--o{ delivery : "отправляется в"
+order }o--|| supplier : "предоставляет"
+order ||--|{ payment_supplier : "предоставляет расчет"
+order }|--|| client : "получает"
+
+legend top
+  <b>Обозначения:</b>
+  * - обязательное поле
+  <<PK>> - первичный ключ
+  <<FK>> - внешний ключ
+  |{--|| - связь многие к одному
+  ||--|{ - связь один ко многим
+  }o--|| - необязательная связь многие к одному
+  ||--o{ - необязательная связь один ко многим
+  ||--o| - необязательная связь один к одному
+end legend
+
+@enduml

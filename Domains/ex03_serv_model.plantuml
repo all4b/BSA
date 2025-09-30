@@ -1,0 +1,310 @@
+@startuml
+
+entity client <<КЛИЕНТ>> {
+  ' Первичный ключ
+  * client_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  last_name : varchar
+  * phone : char [UK]
+  email : varchar [UK]
+  * login : varchar [UK]
+  * password_hash : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  channel_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity manager <<МЕНЕДЖЕР>> {
+  ' Первичный ключ
+  * manager_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity master <<МАСТЕР>> {
+  ' Первичный ключ
+  * master_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  med_book : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity accountant <<БУХГАЛТЕР>> {
+  ' Первичный ключ
+  * accountant_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity head <<РУКОВОДИТЕЛЬ СЕТИ>> {
+  ' Первичный ключ
+  * head_id : int [PK]
+  --
+  ' Основная информация
+  * first_name : varchar
+  middle_name : varchar
+  * last_name : varchar
+  * phone : varchar
+  * email : varchar
+  * login : varchar
+  * password : varchar
+  --
+  ' Связи
+  * role_id : int [FK]
+  --
+  ' Системные поля
+  status_user : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity record <<ЗАПИСЬ>> {
+  ' Первичный ключ
+  * record_id : int [PK]
+  --
+  ' Основная информация
+  * status : enum
+  * date_record : datetime
+  * date_begin : datetime
+  * date_end : datetime
+  * cost : decimal
+  --
+  ' Связи
+  * master_id : int [FK]
+  * client_id : int [FK]
+  * payment_id : int [FK]
+  * service_id : int [FK]
+  --
+  ' Системные поля
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity payment <<ОПЛАТА>> {
+  ' Первичный ключ
+  * payment_id : int [PK]
+  --
+  ' Основная информация
+  * sum_payment : decimal
+  * date_payment : datetime
+  * status : enum
+  * method_payment : enum
+  --
+  ' Связи
+  * record_id : int [FK]
+  --
+  ' Системные поля
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity user_role <<РОЛЬ>> {
+  ' Первичный ключ
+  * role_id : int [PK]
+  --
+  ' Основная информация
+  * role : varchar
+  --
+  ' Системные поля
+  status : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity service <<УСЛУГА>> {
+  ' Первичный ключ
+  * service_id : int [PK]
+  --
+  ' Основная информация
+  * name : varchar
+  * type : enum
+  * duration : int
+  * cost : decimal
+  --
+  ' Системные поля
+  status : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity message_channel <<КАНАЛ СООБЩЕНИЙ>> {
+  ' Первичный ключ
+  * channel_id : int [PK]
+  --
+  ' Основная информация
+  * name : varchar
+  * access : varchar
+  --
+  ' Системные поля
+  status : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity message <<СООБЩЕНИЕ>> {
+  ' Первичный ключ
+  * message_id : int [PK]
+  --
+  ' Основная информация
+  * name : varchar
+  --
+  ' Связи
+  * client_id : int [FK]
+  * channel_id : int [FK]
+  --
+  ' Системные поля
+  status : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity schedule <<РАСПИСАНИЕ>> {
+  ' Первичный ключ
+  * schedule_id : int [PK]
+  --
+  ' Основная информация
+  * date : date
+  * time_begin : time
+  * time_end : time
+  duration : int
+  status_window : bool
+  --
+  ' Связи
+  * master_id : int [FK]
+  --
+  ' Системные поля
+  status : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity feedback <<ОТЗЫВ>> {
+  ' Первичный ключ
+  * feedback_id : int [PK]
+  --
+  ' Основная информация
+  evaluation : int
+  * review : text
+  * date_time : datetime
+  --
+  ' Связи
+  * client_id : int [FK]
+  * master_id : int [FK]
+  --
+  ' Системные поля
+  status : bool
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity master_service <<РАЗВЯЗОЧНАЯ ТАБЛИЦА>> {
+  ' Первичный ключ
+  * master_id : int [PK, FK]
+  * service_id : int [PK, FK]
+  --
+  ' Системные поля
+  created_at : timestamp
+}
+
+entity master_schedule <<РАЗВЯЗОЧНАЯ ТАБЛИЦА>> {
+  ' Первичный ключ
+  * master_id : int [PK, FK]
+  * schedule_id : int [PK, FK]
+  --
+  ' Системные поля
+  created_at : timestamp
+}
+
+' Связи
+user_role ||--o{ client : "имеет"
+user_role ||--o{ manager : "имеет"
+user_role ||--o{ master : "имеет"
+user_role ||--o{ accountant : "имеет"
+user_role ||--o{ head : "имеет"
+
+message }o--|| message_channel : "отправляет через"
+
+master ||--o{ feedback : "просматривает"
+
+client }o--|| message_channel : "выбирает"
+client ||--o{ message : "получает"
+client ||--o{ record : "создает"
+client ||--o{ feedback : "оставляет"
+
+record ||--o| payment : "имеет"
+record }o--|| service : "входит в"
+record }o--|| master : "выполняет услугу"
+
+master_service }o--|| master : "имеет"
+master_service }o--|| service : "имеет"
+master_schedule }o--|| master : "имеет"
+master_schedule }o--|| schedule : "имеет"
+
+
+legend top
+  <b>Обозначения:</b>
+  * - обязательное поле
+  <<PK>> - первичный ключ
+  <<FK>> - внешний ключ
+  }|--|| - связь многие к одному
+  }o--|| - необязательная связь многие к одному
+  ||--o{ - необязательная связь один ко многим
+  ||--o| - необязательная связь один к одному
+
+end legend
+
+@enduml
